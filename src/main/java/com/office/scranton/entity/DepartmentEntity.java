@@ -10,23 +10,22 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "employee")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
-public class EmployeeEntity {
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "department")
+public class DepartmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String password;
-    private String email;
-    private String age;
-    private String role;
-    private Double salary;
-    private LocalDate dateOfJoining;
+    private String title;
+    private Integer numberOfEmployees;
+    @JsonProperty("isArchived")
+    private Boolean isArchived;
     @JsonProperty("isActive")
     private Boolean isActive;
-    private String employeeCreditCardNumber;
+    private Integer primeNumber;
+    private LocalDate createdAt;
+    private LocalDate updatedAt;
 }

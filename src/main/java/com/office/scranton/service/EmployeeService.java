@@ -42,11 +42,11 @@ public class EmployeeService {
         return modelMapper.map(savedEmployeeEntity, EmployeeDTO.class);
     }
 
-    public void updateEmployee(Long id, EmployeeDTO employeeDTO){
+    public EmployeeDTO updateEmployee(Long id, EmployeeDTO employeeDTO){
         doesEmployeeExist(id);
         EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
         employeeEntity.setId(id);
-        employeeRepository.save(employeeEntity);
+        return modelMapper.map(employeeRepository.save(employeeEntity), EmployeeDTO.class);
     }
 
     public EmployeeDTO updateEmployeePartially(Long id, Map<String, Object> fieldsTobeUpdated){
