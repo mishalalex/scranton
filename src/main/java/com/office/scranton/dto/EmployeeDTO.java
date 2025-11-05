@@ -2,40 +2,60 @@ package com.office.scranton.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.office.scranton.annotation.EmployeeRoleValidation;
+import com.office.scranton.annotation.PasswordValidation;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.CreditCardNumber;
 
-@NoArgsConstructor
-@AllArgsConstructor
+import java.time.LocalDate;
+
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmployeeDTO {
+
     private Long id;
 
-    @Size(min = 3, max = 25, message = "Firstname length should be between 3 to 25")
-    @NotBlank(message = "firstname cannot be blank")
-    private String firstname;
+    @NotBlank(message = "Name of the employee cannot be blank")
+    @Size(min = 3, max = 10, message = "Number of characters in name should be in the range: [3, 10]")
+    private String name;
 
-    @Size(min = 3, max = 25, message = "Lastname length should be between 3 to 25")
-    @NotBlank(message = "lastname cannot be blank")
-    private String lastname;
+    @NotBlank(message = "Password of the employee cannot be blank")
+    @PasswordValidation
+    private String password;
 
-    @NotBlank(message = "Email cannot be blank")
-    @Email
+    @NotBlank(message = "Email of the employee cannot be blank")
+    @Email(message = "Email should be a valid email")
     private String email;
 
-    @NotBlank(message = "Role should not be blank")
+    @NotNull(message = "Age of the employee cannot be blank")
+    @Max(value = 80, message = "Age of Employee cannot be greater than 80")
+    @Min(value = 18, message = "Age of Employee cannot be less than 18")
+    private Integer age;
+
+    @NotBlank(message = "Role of the employee cannot be blank")
     @EmployeeRoleValidation
     private String role;
 
-    @Positive(message = "Salary should be a positive non zero number")
     @NotNull(message = "Salary of Employee should be not null")
-    @Digits(integer = 5, fraction = 2, message = "Invalid Salary Format")
+    @Positive(message = "Salary of Employee should be positive")
+    @Digits(integer = 6, fraction = 2, message = "The salary can be in the form XXXXX.YY")
+    @DecimalMax(value = "100000.99")
+    @DecimalMin(value = "100.50")
     private Double salary;
 
+    @PastOrPresent(message = "DateOfJoining field in Employee cannot be in the future")
+    private LocalDate dateOfJoining;
+
+    @NotNull(message = "isActive cannot be blank")
+    @AssertTrue(message = "Employee should be active")
     @JsonProperty("isActive")
-    private boolean active;
+    private Boolean isActive;
+
+    @CreditCardNumber(message = "Invalid credit card number")
+    private String employeeCreditCardNumber;
 }

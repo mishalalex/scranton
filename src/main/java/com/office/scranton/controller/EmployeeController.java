@@ -30,8 +30,9 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeDTO> createEmployee(@Valid @RequestBody EmployeeDTO employee) {
-        return new ResponseEntity<>(employeeService.createNewEmployee(employee), HttpStatus.CREATED);
+    public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody @Valid EmployeeDTO employee) {
+        EmployeeDTO newEmployeeDto = employeeService.createNewEmployee(employee);
+        return new ResponseEntity<>(newEmployeeDto, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/{employeeId}")
@@ -40,14 +41,13 @@ public class EmployeeController {
     }
 
     @PutMapping(path = "/{employeeId}")
-    public ResponseEntity<HttpStatus> updateEmployeeById(@PathVariable Long employeeId, @Valid @RequestBody EmployeeDTO employeeDto) {
-        employeeService.updateEmployee(employeeId, employeeDto);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<EmployeeDTO> updateEmployeeById(@PathVariable Long employeeId, @Valid @RequestBody EmployeeDTO employeeDto) {
+        EmployeeDTO updatedEntity = employeeService.updateEmployee(employeeId, employeeDto);
+        return new ResponseEntity<>(updatedEntity, HttpStatus.OK);
     }
 
     @PatchMapping(path = "/{employeeId}")
     public ResponseEntity<EmployeeDTO> updatePartiallyEmployeeById(@PathVariable Long employeeId, @RequestBody Map<String, Object> updates) {
-        if(employeeService.updateEmployeePartially(employeeId, updates) == null) throw new ResourceNotFoundException("Employee with id: " + employeeId + " not found");
         return new ResponseEntity<>(employeeService.updateEmployeePartially(employeeId, updates), HttpStatus.OK);
     }
 
